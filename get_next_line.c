@@ -6,7 +6,7 @@
 /*   By: erigolon <erigolon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 10:49:23 by erigolon          #+#    #+#             */
-/*   Updated: 2023/02/02 20:47:36 by erigolon         ###   ########.fr       */
+/*   Updated: 2023/02/03 12:12:37 by erigolon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,7 @@ char	*the_line(char *gl_buffer)
 
 	i = 0;
 	if (!gl_buffer[i])
-	{
 		return (NULL);
-	}
 	while (gl_buffer[i] && gl_buffer[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
@@ -82,6 +80,7 @@ char	*read_file(int fd, char *gl_buffer)
 		nr_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (nr_bytes == -1)
 		{
+			free(gl_buffer);
 			free(buffer);
 			return (NULL);
 		}
@@ -99,8 +98,10 @@ char	*get_next_line(int fd)
 	static char	*gl_buffer;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
 		return (NULL);
+	}
 	gl_buffer = read_file(fd, gl_buffer);
 	if (!gl_buffer)
 		return (NULL);

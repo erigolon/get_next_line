@@ -6,7 +6,7 @@
 /*   By: erigolon <erigolon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 10:49:23 by erigolon          #+#    #+#             */
-/*   Updated: 2023/02/03 12:12:37 by erigolon         ###   ########.fr       */
+/*   Updated: 2023/02/13 10:10:34 by erigolon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ char	*next_line(char *gl_buffer)
 		return (NULL);
 	}
 	line = ft_calloc((ft_strlen(gl_buffer) - i), sizeof(char));
+	if (!line)
+	{
+		free(gl_buffer);
+		return (NULL);
+	}
 	i++;
 	o = 0;
 	while (gl_buffer[i])
@@ -46,6 +51,8 @@ char	*the_line(char *gl_buffer)
 	while (gl_buffer[i] && gl_buffer[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
+	if (!line)
+		return (NULL);
 	i = 0;
 	while (gl_buffer[i] && gl_buffer[i] != '\n')
 	{
@@ -74,6 +81,8 @@ char	*read_file(int fd, char *gl_buffer)
 	if (!gl_buffer)
 		gl_buffer = ft_calloc(1, sizeof(char));
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!buffer)
+		return (NULL);
 	nr_bytes = 1;
 	while (nr_bytes > 0)
 	{
@@ -99,9 +108,7 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-	{
 		return (NULL);
-	}
 	gl_buffer = read_file(fd, gl_buffer);
 	if (!gl_buffer)
 		return (NULL);
